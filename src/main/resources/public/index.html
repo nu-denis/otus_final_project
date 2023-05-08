@@ -1,0 +1,58 @@
+﻿<html xmlns="http://www.w3.org/1999/xhtml" content="text/html;">
+<head>
+    <title>Index</title>
+</head>
+<body>
+<div class="top" style="text-align: center">
+    <img src="img/logo.png" style="width: 300px; height: 300px">
+    <br/>
+    <br/>
+    <input style="width: 450px" placeholder="Введите оригинальную ссылку..." id="originalUrl" />
+    <button id="generateUrl" onclick="getShortUrl()" >Сгенерировать</button>
+
+<!--    <h3 style="margin-top: 20px;">Оригинальная ссылка:</h3>-->
+<!--    <div style="margin-top: 20px; font-size: 24px"><a id="originalUrl"></a></div>-->
+
+<!--    <h3>Короткая ссылка:</h3>-->
+    <div style="margin-top: 20px; font-size: 24px"><a id="shortUrl"></a></div>
+</div>
+<script>
+    function isUrl(text) {
+        try {
+            new URL(text);
+            return true;
+        } catch (_) {
+            return false;
+        }
+    }
+
+    function getShortUrl() {
+        const originalUrl = document.getElementById("originalUrl").value;
+        console.log({originalUrl})
+        const elementLinkForShortUrl = document.getElementById("shortUrl");
+
+        if (!isUrl(originalUrl)) {
+            alert("Неверный формат урла")
+            return;
+        }
+
+        fetch(`/url/new`,
+            {
+                method: 'POST',
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({url: originalUrl})
+            })
+            .then((data) => data.text())
+            .then((text) => {
+                elementLinkForShortUrl.innerHTML = text;
+                elementLinkForShortUrl.href = text;
+            })
+            .catch((error) => {
+                console.log({error})
+            })
+    }
+</script>
+</body>
+</html>

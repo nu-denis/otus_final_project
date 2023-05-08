@@ -1,0 +1,3 @@
+docker run --rm --name redis-docker \
+-p 6379:6379 \
+redis:6
